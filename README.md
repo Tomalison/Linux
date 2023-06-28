@@ -25,6 +25,8 @@
 - 接受變更>網路和主機名(裝好要自動連線網路)先把開關打開>完成>開始安裝
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/6ddb58c1-cf06-4edc-a54a-afeeddd8ca66)
 - 設定根密碼 root/自己設密碼
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/4d4ef0a3-c000-4e55-9a2b-f709fa057031)  <--讓此使用者成為管理員/需要密碼才能使用此帳號
+- 
 
 
 
