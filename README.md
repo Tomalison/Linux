@@ -39,3 +39,4 @@
 ![image](https://github.com/Tomalison/Linux/assets/96727036/0eacb1fe-9c13-4e08-a289-a42ee59fabd5)
 - key你的linux使用者帳密進入 ；MAC的做法則是工具列中的終端機使用者帳號@LINUX IP位置
 
+## Linux
