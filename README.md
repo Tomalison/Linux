@@ -58,6 +58,12 @@
 - 切換資料夾 cd ..(目前資料夾的上一層，相對位置的切換) ； cd /home/tomsu25478(絕對位置的切換) ；cd ~(家目錄) ； ls 目錄下的檔案清單 ； ls -l(詳細檔案清單) ； ls -a(顯示全部資料包含隱藏資料) ； ls -al /
 - centos 有一個alias 可以看到每個指令的別名(如下圖)
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/45bd8e55-7264-4431-a883-1c01c1c2af6b)
-- 
+#### Linux主要目錄與辯讀權限
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/d5d5f535-750c-46bc-ade0-d0f888ee49a8) 權限的表現字元，譬如說左邊的dr-xr-xr-x ，d代表是directory就是資料夾
+- r=read w=write x=execute 檔案擁有者對他的權限；檔案傭有者同一族群的人的權限；other的權限
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/36598a05-8c9a-4bbe-ae5b-ba344cae0a0a)
+- bin 或是sbin 依照檔案的權限直來決定是不是可執行，而不是用檔名來判斷 binary  ls /bin 都放在根目錄  ls /sbin是super user可以用的執行檔案(例如網管的軟體、關機、重開機等等)
+- ls -l /etc 裡面放置了所有的設定檔，都是純文字檔，只有系統管理員可以修改這些檔案  ls -l /dev 所有裝置與設備  ls -l /home 如果你是一個擁有
+
 
 
