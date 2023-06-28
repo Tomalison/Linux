@@ -27,7 +27,10 @@
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/6ddb58c1-cf06-4edc-a54a-afeeddd8ca66)
 - 設定根密碼 root/自己設密碼
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/4d4ef0a3-c000-4e55-9a2b-f709fa057031)  <--讓此使用者成為管理員/需要密碼才能使用此帳號
-- 
+- 安裝完成要重啟之前，(顯示記憶體要調高不然會黑屏)先將底下的光碟機圖示按右鍵將掛載的iso檔勾選拿掉，然後重新啟動再第一個地方按Enter
+- 一開始作一些必要的設定，同意條款然後設定完成
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/8e69d9ec-5260-41ed-97e4-d293a0a203ac)
+- 選者漢語、台灣語；不給偵測位置、不設定線上帳號；Linux放在概覽，終端機_ifconfig可以顯示網路狀況 ip a也可以顯示
 
 
 
