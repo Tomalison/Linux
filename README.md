@@ -1,7 +1,7 @@
 # Linux學習紀錄
 
 ## 認識與建置Linux
-- 甚麼是Linux，Debin、UBUNTU、CENTOS、FEDORA、RED HAT 她是一個自由開放的作業系統。
+- 甚麼是Linux，Debin、UBUNTU、CENTOS(GNOME圖形介面)、FEDORA、RED HAT 她是一個自由開放的作業系統。
 - 相關國際認證，操作的能力(活用知識)>>管理的能力(包含防火牆、檔案系統、帳號權限)>>服務的控制(套件、安全性規則做好、Shell、腳本)>>解決問題
 - 認證 : LPIC(Linux Professional Institute)，各發行版共通的知識規範 101 102通過第一級認證 201 202通過第二級認證 PIC 301 通過第三級認證 302~306 / Red hat RHCE認證 要先通過RHCSA
 
@@ -39,4 +39,25 @@
 ![image](https://github.com/Tomalison/Linux/assets/96727036/0eacb1fe-9c13-4e08-a289-a42ee59fabd5)
 - key你的linux使用者帳密進入 ；MAC的做法則是工具列中的終端機使用者帳號@LINUX IP位置
 
-## Linux
+## Linux基礎操作指令
+#### Linux的開機流程
+- Bios/UEFI(與硬體溝通的主程式) >GRUB(bootloader(硬碟啟動要載入的作業系統))>Kernel核心(使用者與電腦的溝通程式)>System
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/d6213754-ab9c-490a-9b0b-0caaf0b11e84)
+- 登入後都必須要logout登出
+
+#### 指令操作
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/95800c3c-38bb-424d-9b52-b29a20393977)
+- 超級使用者跟一般使用者的命令提示字元是不一樣的，一般使用者最後是一個$號
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/fc94061b-2986-4e36-a8f7-16c95c496f65)
+- ~代表自己的家目錄 pwd
+- 如何變身成超級使用者 su -，root的密碼輸入就會變成特殊使用者，後面也會變成#號，要特別謹慎。
+- 加上-才可以變身成為超級使用者的環境變數
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/a169a9ee-bcd3-4967-803a-10562cdd54ed)
+- clear or ctrl+L都可以清除畫面
+#### 基礎資料夾切換、列表、別名
+- 切換資料夾 cd ..(目前資料夾的上一層，相對位置的切換) ； cd /home/tomsu25478(絕對位置的切換) ；cd ~(家目錄) ； ls 目錄下的檔案清單 ； ls -l(詳細檔案清單) ； ls -a(顯示全部資料包含隱藏資料) ； ls -al /
+- centos 有一個alias 可以看到每個指令的別名(如下圖)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/45bd8e55-7264-4431-a883-1c01c1c2af6b)
+- 
+
+
