@@ -63,7 +63,10 @@
 - r=read w=write x=execute 檔案擁有者對他的權限；檔案傭有者同一族群的人的權限；other的權限
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/36598a05-8c9a-4bbe-ae5b-ba344cae0a0a)
 - bin 或是sbin 依照檔案的權限直來決定是不是可執行，而不是用檔名來判斷 binary  ls /bin 都放在根目錄  ls /sbin是super user可以用的執行檔案(例如網管的軟體、關機、重開機等等)
-- ls -l /etc 裡面放置了所有的設定檔，都是純文字檔，只有系統管理員可以修改這些檔案  ls -l /dev 所有裝置與設備  ls -l /home 如果你是一個擁有
+- ls -l /etc 裡面放置了所有的設定檔，都是純文字檔，只有系統管理員可以修改這些檔案  ls -l /dev 所有裝置與設備  ls -l /home 如果你是一個擁有許多使用者的時候，如果要控制這些檔案使用額度，會再切一個分割區讓他放。
+- root超級使用者的根目錄 /root，other無法讀取，只有超級使用者可以看到。
+- usr許多套件軟體都會放在usr
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/9b6a81c7-3062-46d4-b081-c0f83da7fbd3)
 
 
 
