@@ -40,6 +40,7 @@
 - key你的linux使用者帳密進入 ；MAC的做法則是工具列中的終端機使用者帳號@LINUX IP位置
 
 ## Linux基礎操作指令
+
 #### Linux的開機流程
 - Bios/UEFI(與硬體溝通的主程式) >GRUB(bootloader(硬碟啟動要載入的作業系統))>Kernel核心(使用者與電腦的溝通程式)>System
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/d6213754-ab9c-490a-9b0b-0caaf0b11e84)
@@ -54,10 +55,12 @@
 - 加上-才可以變身成為超級使用者的環境變數
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/a169a9ee-bcd3-4967-803a-10562cdd54ed)
 - clear or ctrl+L都可以清除畫面
+
 #### 基礎資料夾切換、列表、別名
 - 切換資料夾 cd ..(目前資料夾的上一層，相對位置的切換) ； cd /home/tomsu25478(絕對位置的切換) ；cd ~(家目錄) ； ls 目錄下的檔案清單 ； ls -l(詳細檔案清單) ； ls -a(顯示全部資料包含隱藏資料) ； ls -al /
 - centos 有一個alias 可以看到每個指令的別名(如下圖)
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/45bd8e55-7264-4431-a883-1c01c1c2af6b)
+
 #### Linux主要目錄與辯讀權限
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/d5d5f535-750c-46bc-ade0-d0f888ee49a8) 權限的表現字元，譬如說左邊的dr-xr-xr-x ，d代表是directory就是資料夾
 - r=read w=write x=execute 檔案擁有者對他的權限；檔案傭有者同一族群的人的權限；other的權限
@@ -67,6 +70,38 @@
 - root超級使用者的根目錄 /root，other無法讀取，只有超級使用者可以看到。
 - usr許多套件軟體都會放在usr
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/9b6a81c7-3062-46d4-b081-c0f83da7fbd3)
+- var變動性與系統等待排隊處理的檔案 (例如網頁的變動資料也會放在這
+- opt非Linux預設安裝的軟體會放在這裡
+
+#### 關機與重啟系統，SUDO指令
+- 先變身為超級使用者 su -
+- w可以看線上使用者 who也可以看
+- shutdown用於關機 ， -h now(直接關機) -h 10(10分鐘後關機) -c(取消關機指令) 'Please back up your job' <可以做一些文字提醒
+- reboot(重新開機)
+- 管理者的話 就是輸入 sudo shutdown -h 10 ，輸入使用者密碼就可以用超級使用者的功能
+
+#### 基本檔案操作_複製_搬移_刪除
+- ls -al / 看一下目錄資訊
+- cp (複製) 來源_目的地 /etc/ (設定膽)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/b9828d26-2db8-4431-8e6d-affc9ad90953)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/52b6095a-e5eb-454e-861b-b4ad133d0fed)
+- cp /etc/fstab . <--就可以將這個資料夾複製到root裡
+- cat指令可以看存文字內容
+- cp fstab aa 可以複製成aa這個檔案
+- cp aa /tmp 可以複製aa到 /tmp
+- 如果要移動這個檔案，mv aa /tmp
+- mv也常常拿來改檔名 mv fstab bb 這樣也可以改檔名
+- 我想要刪除資料 rm /tmp/aa
+- 要刪除資料夾也可以，我們先建立一個資料夾 mkdir dd
+- mv bb /dd
+- 如果要刪除空的資料夾可以用 rmdir dd
+- rm -rf dd一層一層把所有資料刪除，將資料夾有資料的檔案同時刪除 要注意( rm -rf / 可能就把全部資料全刪除)
+
+#### 學怎麼用LINUX，而不是背指令
+- 先問自己要做甚麼事情，例如先有想複製檔案，才聯想到cp指令>在思考學習的經歷
+- 例如圖中範例，我剛剛放進資料夾兩個檔案hostname、hosts。創了一個settings資料夾。這時候將這兩個檔案擺入的settings的一個過程
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/9907f30b-08cc-485f-a91c-fbd479c6d4b6)
+- cd settings進到該目錄 看一下檔案 或是可以直接 ls -l settings/
 
 
 
