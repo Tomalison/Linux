@@ -103,5 +103,119 @@
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/9907f30b-08cc-485f-a91c-fbd479c6d4b6)
 - cd settings進到該目錄 看一下檔案 或是可以直接 ls -l settings/
 
+## Linux的檔案系統
 
+#### XFS檔案系統
+- CentOS7、8的檔案系統 / EXT3加上了日誌功能，節省傳統需掃描的問題，EXT4更好，最大可達1EB。而XFS檔案系統最大可達8EB
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/16e720fb-d4be-44b8-b24e-202aa7c9a89e)
+- xfs指令可以看到相關資訊
+
+#### 認識inode
+- 檔案資訊紀錄檔inode，紀載這個檔案的所有資訊 / 包括檔名、更動時間、權限與檔案儲存的區塊位置等資料 / 每個inode都有唯一的編號
+- ls -i
+- df -h
+- inode使用有限 df -i 可以看到使用量狀況 ，儲存量還夠，但不能存東西，通常都是inode用光了，他不是無限制可以使用
+
+#### 檔案系統相關指令與操作說明
+- 這裡比較需要管理者權限，先變成超級使用者，
+- 如果要看檔案掛載狀況 可以輸入cat /etc/fstab
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/11beb3f6-2390-47a8-9c3c-9c7723cd2e39)
+- 檢查磁碟空間 可以用df這個指令，看檔案使用狀況
+- df -h(human readable) 可讀性可以更高
+- man (操作手冊manual) 例如用man df就可以看到df的完整內容有甚麼
+- info 用info df可以更白話一點 q
+- 佔了多少空間 可以用du /var 可以看/var這個資料夾裡面的資料夾用了多少 --> du -h /var 可以看到完整使用狀況
+- ls -l /
+- du -d 1 -h /
+
+#### 認識連結(LINK)-符號連結與硬連結
+- 允許一個檔案參考到另一個檔案
+- 連結是一種指向另一個檔案的特別檔案 ln -s (目標是哪一個對象) /var myvar
+- ls -l
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/ca75b871-07cd-4de0-b541-0196d6026663)
+- 這個好處是不用複製整個目標資料到這，也可擁有這根目錄var的所有資料(類似捷徑)
+- cp /etc/fstab . 然後我們在連結到fstab這 ln -s fstab slink >> cat slink 就等同於 cat fstab
+- 如果我們刪除fstab (rm fstab) slink就會如下圖
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/6dda7b22-8c51-48fa-a439-bedf6d9bf16c)
+- 那這樣我們就也可以刪除這個連結 rm slink  / rm myvar
+- 硬連結 hotlink   原本的>> cp /etc/fstab . > ll > ln -s fstab slink > ll > ls -i
+- hotlink > ln fstab hlink >> ll可以看到不一樣 >> ls -i 可以看到hlink 等於 fstab一模一樣的inode值 > 所以rm fstab > hlink還是存在 > 可以用cat hlink看 > 他也可以自己做自己權限處理
+- 但硬連結無法跨越分割區
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/af82abb4-abc5-4442-9dfb-817409db93b2)
+- 也不能用在目錄
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/bd475fc4-af59-41cf-9559-04e8b1678808)
+
+#### 執行檔案與PATH環境變數
+- ls /usr/bin/ 之所以可以執行，是因為在PATH環境變數可以被搜索有沒有執行檔可以被執行
+- echo $PATH
+- echo "echo Hello" > runme  這段指令就是把echo Hello 放到runme。但這個可以rw，但不能執行(x)
+- 如果要執行要用到change mode指令 >> chmod u+x runme
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/4fac1b16-0199-4ab2-a48a-5694e4d6662b)
+- 所以要執行當前目錄之下的檔案 要輸入 ./runme 這樣就可以執行了
+
+
+## 檔案編輯與工具
+#### 熟悉VIM文字編輯器
+- 下載網路文字檔案並編輯
+#### 標準輸出入與重導
+#### 篩選與管線處理
+#### 搜尋檔案
+#### 檢視檔案內容
+
+## 硬體設備管理
+#### 硬體設備管理
+#### 掛載光碟片
+#### 加入新硬碟、MBR與新一代GPT
+#### 建立GPT磁碟分割區、使用Parted
+#### Linux開機自動掛載/etc/fstab
+
+## Linux的帳號、群組與權限
+#### Linux的使用者帳號與群組
+#### 新增群組與帳號、刪除帳號
+- 建立群組與帳號並設定練習
+#### 刪除群組、讓使用者無法登入
+#### 檔案權限管理與變更
+#### 目錄資料夾的權限
+
+## 系統行程操作與管理
+#### 行程管理與ps指令
+#### 背景行程管理
+#### 行程優先權、nice指令
+#### 系統行程資訊 /proc虛擬檔案
+
+## Linux防火牆
+#### 防火牆機制FirewallD介紹
+#### 允許特定服務通過防火牆
+#### 新一代管理介面cockpit
+
+## 軟體套件管理RPM、YUM、DNF
+#### 軟體套件RPM:查詢query
+#### 安裝RPM軟體套件:install
+#### YUM與DNF套件管理
+#### 軟體檔案庫repo管理、EPEL擴充軟體庫、remi安裝PHP7.4
+
+## 系統服務與網頁伺服器
+#### 系統服務systemd
+#### 管理服務systemctl指令,Apache網頁伺服器
+#### 架設範例網頁
+#### 模組與設定檔
+
+## 系統管理實務
+#### Mysql(mariaDB)資料庫安裝與設定
+#### Tar壓縮檔案與活用date日期指令
+#### SHell程式設計:批次建立帳號實務
+#### 設計磁碟用量配額設定
+
+## Docker容器管理
+#### Docker容器技術與安裝
+#### Image映像檔與Container容器，指令操作
+#### 建立私人雲服務NextCloud的docker容器
+
+## Google雲端CentOS8虛擬機器
+#### Google雲端虛擬機器準備項目
+#### 建立Google雲端CentOS8虛擬機器
+#### 使用網頁SSH登入Linux並變身為管理者
+#### 安裝Linux必要工具與PHP7.4置換模組
+#### GCP雲端防火牆與Linux防火牆
+#### 配置固定IP與動態域名(domain name)
 
