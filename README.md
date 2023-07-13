@@ -157,10 +157,57 @@
 ## 檔案編輯與工具
 #### 熟悉VIM文字編輯器
 - 下載網路文字檔案並編輯
+- 所有UNIX跟LINUX都內建的文字編輯器，在任何LINUX都可以用它編輯文字檔案 輸入vi
+- wget 抓取網址 ，如果沒安裝可以用dnf install wget -y
+- wget https://www.rfc-editor.org/rfc/rfc854.txt 抓這個測試文檔
+- vim rfc854.txt 就可以
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/8df1f45c-5785-46db-b1a8-0f1c071441b0)
+- 一進來是一般模式，可以用滑鼠跟pageup/down去移動 用:可以進入命令模式，在這裡q就可以離開 不存檔離開q!  w是儲存 wq儲存離開
+- dd 1下是快速刪除一行 gg可以回到檔案最前頭 shift+G可以到檔尾 w可以跳一個空白到下一個字符過去 yy是複製 p是貼上 u回復上一動
+- i o a 可以進到編輯模式 i是插入  o是進到編輯模式在新增一行 a會進入到編輯模式然後到下一個字元
+- esc就是回復到一般模式
+- 200 + G 就是快速到200行
+- 沒存檔就直接XX 就是沒經過完整存檔就關掉，再進去該檔案，會出現警告 說有找到一個暫存檔，R繼續編輯 存檔後 可以用rm刪除剛剛的暫存檔
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/603afb88-9f83-4843-9ba1-522739b6dea9)
+
 #### 標準輸出入與重導
+- 標準輸入 :鍵盤 標準輸出 :螢幕 標準的錯誤訊息輸出 :螢幕
+- df > 可以導到一個檔案之中 例如df > myfile 這就是說把df原本要輸出到螢幕上的內容 導到myfile這個檔案中，請注意myfile不能存在不然會覆蓋 /<是重導
+- ls >> myfile 就可以把內容導到myfile後面的
+- 要將錯誤訊息導到另一個地方 可以用2> 例如 ls /abcde 2> myfile
+- 如果要把錯誤跟標準正確的資訊都導到一個地方 可以用 ls /abcde > myfile 2>&1 就可以都導到myfile上
+- 重導輸入 wc ，輸入資料後Ctrl+D 就可以算出 行數 /幾個字 /幾個字元
+- wc < /var/log/messages 就可以重導輸入 
+- pipeline : more 例如 ls /usr/bin | more 就是把左邊的指令送給 more 就是管線的應用
+  
 #### 篩選與管線處理
+- 在檔案中要找特定的內容時 grep 特定文字 檔案(對象)
+- grep login /var/log/messages 就會出現如下圖在該檔案中找到跟login有關的字元資訊
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/75bc0024-8efe-49fd-8be3-9520402b2e9d)
+- 要找全部檔案 可以如範例* grep login /var/log/*
+- 如果你在檔案中 只對某些字有興趣，可以像這樣 ls /usr/bin | grep mk 把左邊的資訊 透過管線 導入 右邊指令再找
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/3d8b5f1b-f0ca-45ba-8ac3-dd9cbc5fe8ee)
+- rpm -qa 可以找到我們系統有安裝甚麼套件通常找很多套件 我只想找某個檔案 rpm -qa | grep httpd
+
 #### 搜尋檔案
+- 例如pwd是放在PATH環境變數 echo $PATH
+- 可以用 which pwd ，但which適合查一些已經存在的命令或是執行檔案
+- locate pwd 他是一種查詢 不是搜尋 updatedb(通常半夜排程這個指令) 再用locate才可以查的到
+- 希望可以搜尋整個系統資料，要用find。 盡量不要用/目錄 要用 find /home -name tomsu25478
+- find /var/ -perm 755  (755=rwxr-xr-x的權限) 還可以查某一個有變更時間的資料 find /root -ctime -2 (2天內有更新的資料)
+- find /usr/ -size +5M (可以找出這個資料夾有5M以上的檔案)
+
 #### 檢視檔案內容
+- cat可以用來產生文字檔 cat > test.txt  Enter 開始輸入內容 然後Ctrl+D 存test.txt
+- cat -n > data.txt 可以存成有行號的資料
+- more在做分頁顯示  例如 more anaconda-ks.cfg 要繼續用空白看完其他資訊
+- less anaconda-ks.cfg  可以輸入:數字 往下幾行
+- head anaconda-ks.cfg 呈現檔案前面的10行資料
+- tail anaconda-ks.cfg 呈現檔案後面的10行資料， 這常常使用，最新的LOG資料時常都是補在檔案的最尾巴 / 他也可以持續的追蹤
+- tail -f data.txt 追蹤剛剛的data檔
+- 例如在開啟一個命令列，然後用cat >> data.txt 後 新增某些資訊，就可以看到剛剛的命令-f 可以看到他做的事情
+- Ctrl+C就可以停止追蹤他
+- more時常配合管線做分頁資料查找 例如 ls -l /usr/bin | more 就可以一頁頁查找資料
 
 ## 硬體設備管理
 #### 硬體設備管理
