@@ -275,7 +275,8 @@
 - cp /etc/fstab /etc/fstab.backup(先做一個備份 比較保險)
 - blkid 先找到sdc1整段資訊複製
 - blkid /dev/sdc1 >> /etc/fstab(一定要兩個>> 不然一個>會蓋過去) 
-- vim /etc/fstab 游標放到該行 用i 將sdc1 UUID 雙引號""後面的資訊全刪除  告訴他我未來要掛載的 /disk2 xfs  defaults 0 0 (預設值 /不用備份 / 不須重新開機
+- vim /etc/fstab 游標放到該行 用i 將sdc1 UUID 雙引號""後面的資訊全刪除  告訴他我未來要掛載的 /disk2 xfs  defaults 0 0 (預設值 /不用備份 / 不須重新開機 然後UUID前面也都刪除
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/44ededb7-e6f8-4b64-b1ad-749fb933ff38)
 - 下完之後 要wq 儲存
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/fb7d5b5f-8d80-4236-9b92-a8e27a61f1c7)
 - mount -a    用cat /proc/mounts看一下有成功掛載
