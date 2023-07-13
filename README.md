@@ -211,10 +211,79 @@
 
 ## 硬體設備管理
 #### 硬體設備管理
+- 要談到硬體設備，要談到 ls /dev(硬碟) 這個資料夾  這是設備檔案  例如 /dev/sda = SCSI硬碟 SATA硬碟
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/2fab56ac-e716-4320-903d-bb9e0af2ce29)
+- ls -l /dev | more 可以看到這些分類字母，-號是一般的檔案 l是連結 d是資料夾 b是區塊型檔案(光碟機/硬碟) c代表是文字型(終端機/磁帶機/印表機等等)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/cf3b2491-962e-4762-acf2-4d8c64a06e7a)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/bcb7fc12-3d7c-4adc-9e09-7b84c8b8738a) 這是Major number 旁邊是次要的辨識碼 這辨識碼很重要，之後要使用這些設備都必須先用mount掛載設備
+- mount需要的指令就是設備的名稱
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/bef91c46-65f0-47f0-850c-00bf74762371) tty
+- 連接到UNIX伺服器 稱為是終端機
+- 所以Linux準備了許多終端機連線這些設備
+
 #### 掛載光碟片
+- mount掛載設備 umount卸載設備 (超級使用者)
+- ls / 後可以看到一個media 是我們常用來掛載資料的資料夾
+- 譬如說mkdir /media/iso
+- man mount可以看一下使用手冊
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/f14c3ef0-7e8e-4ee2-b4f2-384e1ac4a1a2)
+- lsblk(列出區塊設備) 可以看到我們剛剛掛載的光碟片 blkid(看更詳細的資料)
+- iso9660 = 光碟片檔案系統
+- blkid -p /dev/sr0(剛掛載在虛擬機的ISO檔)
+- mount /dev/sr0 /media/iso 就可以掛載到我們剛剛建好的資料夾
+- 如果ls /media/iso 就可以看到這個光碟上面的資訊
+- 要退出 要 umount /media/iso 就可以退出這個光碟
+
 #### 加入新硬碟、MBR與新一代GPT
+- shutdown -h now(先關機)
+- 關機後 VB進入設定>存放裝置>選控制器SATA>加入硬碟>建立>測試1G>取名newdisk1>這顆磁碟機就已經附加到我們虛擬機上面
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/50a2786e-f07c-48b8-b6df-d48b5c833449)
+- 舊的磁碟分割 MBR(Master Boot Record) :512byte磁區 /一個硬碟最多能有4個主分割區 /無法處理超過2TB以上的硬碟 /使用fdisk指令管理
+- 新的磁碟機分割是使用GPT (Guid Partition Table) 4096byte磁區 /支援超過2TB磁碟 /使用parted、gdisk指令管理
+- fdisk -l /dev/sdb 就可以看到剛剛我們建立的磁碟區
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/2cf07861-ac16-4b0b-9895-ebaea8f3a048)
+- fdisk /dev/sdb  一般用D刪除分割區 按N建立分割區 按P看硬碟有沒其他分割區
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/ab547bda-e9c1-43bf-97db-74a0b6aa86ed)
+- 我們按n建立分割區>按p當作主分割區>編號有4個要放在哪一個 > +800M
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/61536363-d6c8-425d-89d3-ad04945aab91)
+- 按下w 寫入 這樣就建立完成了
+- 用blkid檢查剛剛建立的磁碟有沒有在裡面
+- 有了之後要格式化>掛載
+- mkfs.xfs -f /dev/sdb1 (格式化)
+- mkdir /disk1 建一個未來要掛載的資料夾
+- mount /dev/sdb1 /disk1 掛載
+- ls -l / 檢查 blkid
+- 這時候我就可以 cd /disk1 去做操作 例如 touch data 放置一個資料
+
 #### 建立GPT磁碟分割區、使用Parted
+- shutdown -h now(先關機)
+- 操作方式一樣，名稱取做newdisk2 / 可以預測它的名稱會排在/dev/sdc
+- fdisk -l /dev/sdc 檢查一下有沒有出現
+- parted /dev/sdc 建立GPT 
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/627776b3-9fbd-4bb2-940a-039c77cd2b57)
+- mktable gpt 建立GPT格式的分割區
+- print 指令
+- mkpart primary xfs 1MB 800MB (起始在1MB 結束在800MB，建立完不需要儲存 直接quit就可)
+- blkid 
+- mkfs.xfs -f /dev/sdc1 (再三確認在下這個指令)
+- mkdir /disk2
+- mount /dev/sdc1 /disk2
+- 可以測試 touch /dsik2/data 丟一個資料 cp /etc/fstab /disk2 複製到disk2 最後檢查 ls -l /disk2來看資料
+
 #### Linux開機自動掛載/etc/fstab
+- cat /etc/fstab
+- cp /etc/fstab /etc/fstab.backup(先做一個備份 比較保險)
+- blkid 先找到sdc1整段資訊複製
+- blkid /dev/sdc1 >> /etc/fstab(一定要兩個>> 不然一個>會蓋過去) 
+- vim /etc/fstab 游標放到該行 用i 將sdc1 UUID 雙引號""後面的資訊全刪除  告訴他我未來要掛載的 /disk2 xfs  defaults 0 0 (預設值 /不用備份 / 不須重新開機
+- 下完之後 要wq 儲存
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/fb7d5b5f-8d80-4236-9b92-a8e27a61f1c7)
+- mount -a    用cat /proc/mounts看一下有成功掛載
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/9049b037-d8fa-46e1-b140-f89fba740371)
+- 確認完重新開機 shutdown -h now
+- blkid   ls /disk2   df -h
+
+
 
 ## Linux的帳號、群組與權限
 #### Linux的使用者帳號與群組
