@@ -311,10 +311,35 @@
 - 建立群組與帳號並設定練習
 
 #### 刪除群組、讓使用者無法登入
+- groupdel rd 刪除rd群組
+- 但是如果群組裡面還有其他使用者帳號，他無法直接刪除
+- 之前設定的useradd的帳號沒有密碼登入不了。所以要用 passwd tomsu25478 就會叫你設定密碼
+- 如果要禁止某使用者帳號無法登入 手動改 :vi /etc/passwd 進入後 到該帳號的 /bin/bash處 改成 /sbin/nologin
+- 還有一種是比較常用的指令改他無法登入 : (change shell) chsh tomsu25478 就會叫出新命令殼 改成/sbin/nologin
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/55dd57f3-1a1c-4e67-a419-1ee0e74993c2)
 
 #### 檔案權限管理與變更
+- ls -l 可以看到每個檔案最左邊有10個字元表達他的權限狀態
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/e86d6b21-97ed-451e-84dd-d7193ebdbde9)
+- r=可讀(read) / w=可變動與刪除(write) / x=可執行(execute)
+- 下圖解析權限值計算方式 
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/6ba5a81c-d236-490a-94ca-a24de674d6d3)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/a470afa3-7994-43b6-9d5a-6f07b9e7be7d)
+- 要改變權限可以使用change mode指令 chmod 例如 chmod 755 data.txt 那他就可以改變data.txt成我們指定權限值的權限內容 像755就是 rwxr-xr-x
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/1d2d35ba-7970-466a-bb45-891a0c423e99)
+- 上圖chmod 可以用權限者 例如"u"ser  "g"roup "o"ther的角度 新增刪除權限 例如 chmod o-rx data.txt 這時候就會剝奪other的權限值就會減掉rx / 或是 我們chmod o=r data.txt 就是讓這個other只有r的權限
+- 如果要一次改兩個擁有者 我們可以 chmod go=r data.txt 就會一次把group跟other一起改成r權限
+- 如果要加權限 chmod g+x data.txt 就可以將group加上x的權限
+- 如果全部類型傭有者都要一起改 chmod a=r data.txt 就可以將所有傭有者都變成r的權限
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/9196960e-f4ff-4649-85a6-6476210c7852)
 
 #### 目錄資料夾的權限
+- 目錄的 r=列出目錄內容 w=可在目錄中編輯與刪除檔案 x=可進入該目錄
+- 如下圖我在root進入opt資料夾後，新增project，再用另外一個帳號近來會看不到opt內的project但我可以新增myfile 這時候我再用root近來用ls -l看一下就會看到myfile跟project兩個
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/d179da0e-17df-4eb8-908a-a617375f0f26)
+- 這時候我再用chmod o-rx project/將其他人這個資料夾的rx權限拿掉 這時候其他人就進不了也看不了這個資料夾
+- chgrp 可以將這個資料夾或是檔案的群組權限轉給另一個群組 chgrp wheel project/ 就是將 project這個權限轉給wheel這個群組
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5a52a1de-dcc4-4e33-9b34-0d80334086f4)
 
 ## 系統行程操作與管理
 #### 行程管理與ps指令
