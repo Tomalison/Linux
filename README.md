@@ -284,55 +284,98 @@
 - 確認完重新開機 shutdown -h now
 - blkid   ls /disk2   df -h
 
-
-
 ## Linux的帳號、群組與權限
 #### Linux的使用者帳號與群組
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/c3821fdf-2c38-4d74-969c-e701e1b3028e)
+- Linux一定是多人作業，你一定要建立帳號的所屬群組
+- Linux的群組是建立在etc裡的group  cat /etc/group
+- 第一個是群組名稱:有沒有使用:編號值:存在帳號
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/4bc3c0a9-922c-4b41-8c38-dc9e2759019c)
+- 建立群組 groupadd >> 要建rd  就輸入groupadd rd
+- 建立帳號 useradd  >> 要建andy 就輸入useradd andy 但這樣就會直接在建一個叫做andy的群組
+- cat /etc/passwd 帳料資料檔 冒號之間依序為 帳號:x(代表密碼):使用者ID:群組ID:註解:使用者的家目錄:這使用者使用的Shell程式是哪一隻
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/b5b4fd4d-a746-4c2f-a325-c7c7defaa3f4)
+- cat /etc/shadow 帳號的密碼放在這 可以看到hank的密碼是有經過處理的，mike的是!!代表還沒密碼 無法登入
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/40ef8026-5be7-4688-8c81-e9fd12de2a9b)
+- ls -al /home/mike
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/80acee42-b680-4edd-8d7c-d5610fdbf668)
+
 #### 新增群組與帳號、刪除帳號
+- id tomsu25478 可以觀察帳號資訊 使用者uid 群組gid groups代表有加哪些群組
+- useradd -g rd tomsu25478 就可以把這個帳號加到rd這個主要群組
+- 將該帳號加入額外群組 usermod -G sales tomsu25478 就可以將這帳號再額外加入 sales這個群組
+- 但如果要額外加兩個群組 usermod -G sales,manager tomsu25478 才可以一次加兩個額外群組 不然會蓋過去
+- 如何刪除帳號 userdel mike 這樣只會刪除etc裡面的帳號跟群組紀錄 不會刪除他的家目錄 要記得home的資料夾要自己去刪
+- 所以要一次刪除 userdel -r mike就會將家目錄一起刪除
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/0fd01454-2c4a-4da3-8d78-ba4e7c4acbcd)
 - 建立群組與帳號並設定練習
+
 #### 刪除群組、讓使用者無法登入
+
 #### 檔案權限管理與變更
+
 #### 目錄資料夾的權限
 
 ## 系統行程操作與管理
 #### 行程管理與ps指令
+
 #### 背景行程管理
+
 #### 行程優先權、nice指令
+
 #### 系統行程資訊 /proc虛擬檔案
 
 ## Linux防火牆
 #### 防火牆機制FirewallD介紹
+
 #### 允許特定服務通過防火牆
+
 #### 新一代管理介面cockpit
 
 ## 軟體套件管理RPM、YUM、DNF
 #### 軟體套件RPM:查詢query
+
 #### 安裝RPM軟體套件:install
+
 #### YUM與DNF套件管理
+
 #### 軟體檔案庫repo管理、EPEL擴充軟體庫、remi安裝PHP7.4
 
 ## 系統服務與網頁伺服器
 #### 系統服務systemd
+
 #### 管理服務systemctl指令,Apache網頁伺服器
+
 #### 架設範例網頁
+
 #### 模組與設定檔
 
 ## 系統管理實務
 #### Mysql(mariaDB)資料庫安裝與設定
+
 #### Tar壓縮檔案與活用date日期指令
+
 #### SHell程式設計:批次建立帳號實務
+
 #### 設計磁碟用量配額設定
 
 ## Docker容器管理
 #### Docker容器技術與安裝
+
 #### Image映像檔與Container容器，指令操作
+
 #### 建立私人雲服務NextCloud的docker容器
 
 ## Google雲端CentOS8虛擬機器
 #### Google雲端虛擬機器準備項目
+
 #### 建立Google雲端CentOS8虛擬機器
+
 #### 使用網頁SSH登入Linux並變身為管理者
+
 #### 安裝Linux必要工具與PHP7.4置換模組
+
 #### GCP雲端防火牆與Linux防火牆
+
 #### 配置固定IP與動態域名(domain name)
 
