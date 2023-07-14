@@ -1,4 +1,4 @@
-# Linux學習紀錄
+![image](https://github.com/Tomalison/Linux/assets/96727036/5e99815d-99e5-40a3-ab5c-d336999862fa)![image](https://github.com/Tomalison/Linux/assets/96727036/065a9ecf-c255-480a-942c-f1d54cc6bb55)# Linux學習紀錄
 
 ## 認識與建置Linux
 - 甚麼是Linux，Debin、UBUNTU、CENTOS(GNOME圖形介面)、FEDORA、RED HAT 她是一個自由開放的作業系統。
@@ -343,19 +343,87 @@
 
 ## 系統行程操作與管理
 #### 行程管理與ps指令
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/860d5ad3-a0e3-450e-949b-a8f956d7ee59)
+- CPU配置了許多一段段的時間給要執行的行程，是一項行程都有所謂的PID(process id 行程ID)
+- 每次我們執行了一個指令 就會產生一個行程 去執行完
+- ps(process status) 可以看到所有執行的行程資訊 ps -f詳細資訊 可以看到PPID 是PID衍伸出來的副行程(如下圖 -bash是su -衍伸出來的行程
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/19ad5225-b389-486a-81c1-92d49fed9219)
+- ps aux (所有伺服器背後的所有行程 ps aux | more用通道做分頁
+- ps aux | grep cron 篩選cron去觀察有關他的行程資訊
+- top  持續監控  (Priority優先權
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/a9f62ac1-ffb9-4d30-9afd-9cab6f88f453)
 
 #### 背景行程管理
+- 前景行程 : 例如之前的updatedb要執行6秒  updatedb & 就會把這個行程放到背景去執行
+- jobs可以看背景行程有哪些
+- sleep 3 可以睡3秒  所以用 sleep 60 & 再用jobs就可以觀察背景這個行程
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/b162ace7-910b-48a7-b084-ea54c8bbf0c7)
+- CTRL +Z可以暫停你的指令 >> bg可以把指令丟到背景
+- 如果要取回背景行程 打下fg 後 CTRL+C取消行程
+- 單取回某個正在執行的背景行程，打下fg 數字(該行程代號)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/92055732-cbe6-4b47-a4c8-70a4c1c0492d)
 
 #### 行程優先權、nice指令
+- NICE值 行程優先權 -20~19 數字越低有越高優先處理權 / 一般預設是0
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/0950eefb-4baa-470a-b689-5ce2439e68ff)
+- nice -n -10 sleep 60 & 用 ps l可以觀察 sleep這個行程的NI是-10
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/4ac2210c-9194-41fe-a7a0-ad8e92f6dc7c)
+- kill指令 : 送出15term訊號到行程中，利如下圖範例 kill 25708 就會送出一個值 15號 結束行程
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/07a5cdbe-2b64-445a-ac53-571eaa359e33)
+- kill -9 25722 用9這個是強制殺除
+- killall sleep(可以殺除跟sleep相關的所有指令可以全部殺除)
 
 #### 系統行程資訊 /proc虛擬檔案
+- /proc 系統行程虛擬檔案
+- tree /proc 可以看到裡面的樹狀結構  ls -l /proc | more  來觀察行程資料的資料夾 都是虛擬檔案 例如可以看到cpuinfo
+- 這時候將 cat /proc/cpuinfo 就可以看到CPU的相關資訊 有非常多資訊都是以虛擬檔案的方式來告訴你
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/c3bda813-7caa-4db4-9c23-e03709ac0d31)
+- cat /proc/partitions 可以列出來現在分割區的狀態
+- cat /proc/sys/kernel/hostname 可以看到主機資訊 阿如果你要改名稱也可 echo "centos8" > /proc/sys/kernel/hostname 就改了centos8
+- 行程管理在系統面管理的觀念很重要
 
 ## Linux防火牆
 #### 防火牆機制FirewallD介紹
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/41fc5369-14df-4a84-9295-f3ab74f58318)
+- 防火牆在Linux是他的一個服務 限制哪些流量可以進來或出去
+- FirewallD 這個D就是Daemon常駐背景的程式 ， 
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/081e289f-5742-4f05-ade6-816f22998f8b)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/1125c403-ad6a-4ab3-a5ab-532bd3d4e026)
+- FirewallD 提供了一個Zone 我們這個主機在哪個地點  提供了 介面=網路卡的設備 提供了Service幫我們設定了埠號、網路協定、封包等等 提供了port去做限制
+- firewall -cmd
+- firewall -cmd --get-zones 可以看到我們主機有哪些zone 如果要知道現在主機定位在哪個zone > 可以用 firewall -cmd --get-default-zone 查看
 
 #### 允許特定服務通過防火牆
+- firewall-cmd --get-active-zone 這是目前我們正在使用的區域ZONE值 他會顯示目前的虛擬網路設備 ，目前是public用的乙太網路卡
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/a0bc7c9e-3c1d-46f3-8480-1a32e4dd19f3)
+- firewall-cmd --list-all 可以看到詳細的資訊
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/170522f5-b22e-4456-afe2-419d0e59c692)
+- 如上圖 SSH代表可以從外部連線到Linux的22埠號
+- ls /usr/lib/firewalld/services/ 這裡已經放好的預先儲存好的服務的定義 xml值
+- cat /usr/lib/firewalld/services/ssh.xml 就可以看到這個檔案定義的資訊
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/472c7ec7-6f22-4b4a-9280-22260df8c652)
+- cat /usr/lib/firewalld/services/cockpit.xml 可以看到9090port是開啟的
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/3bceaeea-cd21-434f-9161-2aefc57d3f34)
+- 假設我這台機器想要開啟80port 就是網頁伺服器的服務
+- cat /usr/lib/firewalld/services/http.xml 可以看到80port是開放的
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/0c4f3067-21df-410e-bdb8-2cefc20a5b4b)
+- 如果我想打開防火牆有關80port的設定
+- firewall-cmd --add-service=http  他有兩種設定 一個是runtime正在執行中的儲存值(系統關機後會消失) 一個是permanent持久設定值 firewall-cmd --add-service=http --permanent --zone=public 這個時候才會寫入到設定裡
+- firewall-cmd --reload 去讀取已儲存的設定值套用到目前核心的執行環境 這才是完整設定好。 未來網路來的80port才會被通過
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/fa0e2341-cc06-46ed-a543-11dc9709c379)
+- 如果我只是想讓本機的某個埠號通過，我可以用firewall-cmd --add-port=9958/tcp --permanent >> firewall-cmd --reload
+- 再觀察一下 就會看到9958port
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/c6afd4cb-0eea-4b8e-ad5a-daca5b7576b3)
 
 #### 新一代管理介面cockpit
+- redhat8有一個新的管理介面 叫做cockpit
+- systemctl enable --now cockpit.socket 可以啟動這個服務
+- 如果再firewall-cmd --list-all 沒有看到這個cockpit的服務 也可以用firewall-cmd --add-port=9090/tcp --permanent >>firewall-cmd --reload 開啟這個服務
+- 這個指令就是取代 netstat -tanlp這個網管指令 ss -tanlp 可以傾聽服務是否有被啟動 可以看下圖9090有通了
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/0be251f8-8d10-4a9e-a0df-5b4ef5ef9009)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/7c6c97ff-d099-4f81-bd37-29c14c3aee33)
+- 這工具也取代了以前我們都要裝webmin這樣的網頁管理Linux套件軟體
+
 
 ## 軟體套件管理RPM、YUM、DNF
 #### 軟體套件RPM:查詢query
