@@ -427,30 +427,220 @@
 
 ## 軟體套件管理RPM、YUM、DNF
 #### 軟體套件RPM:查詢query
+- rpm : Red hat Package Management 是將預先編譯好的軟體給包裝起來 直接在該系統安裝 省去在上面編譯的工作，所以這個RPM被各個Linux使用
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/324e388f-5f54-4979-9d0e-13196273146a)
+- rpm 可以看到許多用法
+- 例如man rpm看它的使用手冊 最常用的是query(查詢) rpm -q / rpm -i / rpm -e
+- rpm -qa 查詢全部套件 也可以透過管線方式 rpm -qa | grep gzip來查gzip軟體套件資訊 包含名稱/大版號/修正次數.版本/平台
+- rpm -qi gzip 可以查他的相關資訊
+- rpm -ql gzip 可以查這個檔案的清單，看他在我們系統裝了哪些資訊
+- rpm -qf ^C
+- rpm -qf /etc/fstab
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/d9231fd2-a708-4228-9849-ba62f7e70954)
 
 #### 安裝RPM軟體套件:install
+- rpm的安裝 先開啟虛擬機器的光碟片按右鍵 掛載CentOS
+- mount /dev/sr0 /media/iso
+- 這時候我們要找rpm放在哪 他是放在 ls /media/iso/AppStream/Packages/
+- rpm -ivh /media/iso/AppStream/Packages/mc i=安裝 v=資訊 h=進度條
+- 這樣就可以安裝mc這個軟體，如果有依賴型的安裝還要先把其他安裝完才能安裝
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/cae1597e-5527-4139-9ee0-d5efd2bf05a6)
+- 像這樣裝好後，就可以執行mc這個指令
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/25f3eff3-a72f-45cb-a382-187a41628544)
+- 按下F10 就可以離開剛剛的軟體
+- rpm -e mc (erase)就可以刪除套件軟體
+- 如果我們裝一個比較大的軟體 rpm -ivh /media/iso/AppStream/Packages/ant 他是JAVA的開發建置工具，這時候她出現了錯誤說要先裝ant-lib + java-devel + javapackages-tool才可以裝ant-1
+- 這時候我們就要裝這些依賴的套件，但這樣就會牽扯到許多的指令
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/8f4b7109-28f5-49db-9ed4-f137cdf1ae5b)
+- 所以red hat又發表了yum dnf來解決上述的問題
 
 #### YUM與DNF套件管理
+- yum (Yellow dog Updater, Modifield) 將軟體套件的檔案集中在網路伺服器
+- 伺服器會算出你有多少相依檔案要安裝，一起打包下載回來依照順序安裝
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/12d2d9bb-540a-4380-9a44-e983f2accc9f)
+- 他的CentOS 是放在 ls /etc/yum
+- cat /etc/yum.conf ； ls /etc/yum.repos.d/ 看到這些檔案設定黨
+- cat /etc/yum.repos.d/CentOS-AppStream.repo (REPO 檔案庫) 可以看到一些鏡像檔 我們可以找出離我們最近最快的方式
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/eda1051e-923c-401b-a1f3-3b5402893cb5)
+- 承前一單元範例 yum install ant 他就會去伺服器檢查 ant到底要裝那些軟體 要得話Y
+- 如果要直接安裝 也可以 yum install ant -y
+- dnf (Dandified Yum)
+- dnf install -y (跟yum用法一樣)
 
 #### 軟體檔案庫repo管理、EPEL擴充軟體庫、remi安裝PHP7.4
+- dnf repolist 可以列出來現在有幾個伺服器資訊
+- dnf search php 可以搜尋有沒有可以被我們安裝的軟體 例如範例就是去找出PHP有關的軟體
+- EPEL (Extra Package Enterprise Linux) 是由FEDORA社群維護的額外型檔案庫。
+- dnf install -y epel-release 可以安裝這個軟體包
+- ls /etc/yum.repos.d/ 可以看一下跟epel有關的設定檔
+- dnf repolist
+- dnf search htop
+- dnf -y install htop
+- htop這個軟體就是由EPEL軟體庫安裝而來
+- 那像PHP7就沒放在官方軟體庫也沒放在EPEL 而是放在REMI檔案庫
+- dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+- 直接找到你要安裝的網址 來安裝
+- dnf -y install php74 ； dnf -y install httpd
 
 ## 系統服務與網頁伺服器
 #### 系統服務systemd
-
+- Linux最大的優點是她的網路服務 例如網頁伺服器 apache ngnix 或是域名轉換的伺服器
+- 也就是說我們需要安裝這些軟體，由一個systemd (System Daemon) 他是開機後執行的第一個程式，他在管理Linux的常駐程式
+- systemd Linux新一代服務啟動程序
+- systemctl 可以管理各類的服務
+- 談談systemd裡面的一些設定檔
+- ls /usr/lib/systemd 
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/728816f6-d4b6-4906-8437-14448e32d5e5)
+- 裡面有個資料夾叫system 服務設定檔資料夾 就可以看到裡面一堆設定檔
+- UNIT 每一個服務都是一個單元
+- TARGET代表的是一個階段標的，可訂定在某個階段時需要啟動甚麼UNIT服務
+- cat /usr/lib/systemd/system/graphical.target
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/eb4a29fe-316b-42f6-ad80-0a585316f3bd)
+- systemctl isolate multi-user.target 可以用這指令去做切換 你未來要到文字介面做
+- systemctl isolate graphical.target 這就是在設定開機要在甚麼模式下
+- cat /usr/lib/systemd/system/httpd.service 當我們安裝APACH的伺服器 這裡面就會有一個這樣的設定檔
+- systemctl status httpd 可以看到我們目前沒有啟用他，如何啟用他呢
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/827257e0-5890-4733-8431-fa775f1b6209)
+- systemctl start httpd.service 就可以啟動 systemctl stop httpd.service 可以停止這個服務
+- systemctl restart httpd.service 重啟這個伺服器
+- 如果要自動開機開啟阿帕契 systemctl enable httpd  / 如果未來開機不要再打開則用 systemctl disable httpd
+  
 #### 管理服務systemctl指令,Apache網頁伺服器
+- systemctl status httpd
+- firewall-cmd --list-all 可以看一下PUBLIC這個ZONE有沒有允許 HTTPD SSH通過
+- cat /usr/lib/firewalld/
+- firewall-cmd --add-service=https --permanent
+- firewall-cmd --reload
+- firewall-cmd --list-all 這時就可以看到https被加入了
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/c7e8a0c1-e192-4706-b8e8-53f7ee669445)
+- ps aux | grep httpd 可以看到許多行程跟httpd有關 可快速回應網路需求
+- vim /etc/httpd/conf/httpd.conf
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5621363d-8473-440c-997f-ce1f5e5209cb)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/e3b179bb-a010-4cd7-b9f5-f4789cf2c4ac)
 
 #### 架設範例網頁
+- 用APACHE建立一個對外的範例網頁 free web template
+- 下載ZIP檔(複製他的網址)
+- wget 剛剛複製的網址
+- unzip 剛剛的ZIP檔名稱
+- cd 剛剛解壓縮後的資料夾/
+- ls 看一下裡面的檔案
+- ls /var/www/html 可以放在這裡
+- cp -R . /var/www/html 複製該資料夾 (cp -R:Recursive連資料夾內的檔案一併複製) .目前所在資料夾的所有資料
+- cd /var/www/html
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/7fddc014-64c8-4719-ab91-864c9200e1e7)
+- 可以看到擁有者都是root
+- 在先前的APACH我們知道使用者與群組都是APACH
+- 換擁有者的指令是 chown -R apache:apache * (使用者:群組) 就會把所有檔案使用者變成APACH
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/f8c4b323-1c6e-4637-a8e2-45c9d656f302)
+- 可以測試你LINUX的ID EX 192.168.0.188
 
 #### 模組與設定檔
+- cd /etc/httpd/ > ls -al
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/bea36106-03f8-422c-8fef-14466b9053d1)
+- modules 可以看一下APACH裡面的模組 Module模組 各個功能依照模組的方式開發後，啟動APACHE時可選擇要載入某些附加功能的模組
+- 可以選擇性的導入這些模組
+- ls conf.modules.d/
+- vi /var/www/html/test.php 來確認一些PHP模組狀況
+- systemctl restart httpd
 
 ## 系統管理實務
 #### Mysql(mariaDB)資料庫安裝與設定
+- dnf install mariadb-server
+- systemctl start mariadb 啟動資料庫
+- 做初始化設定 mysql_secure_installation
+- MYSQL有自己的管理者帳號，也叫root 因為第一次安裝先按ENTER 接下來會設定密碼
+- 自行建立root密碼
+- 是否允許遠端登入 要的話按N 是否要刪除測試資料庫 Y 是否要讀取權限的表格 Y
+- 這樣就完成初始化設定
+- mysql -u root -p 互動式方式給密碼 > 打密碼
+- 就進入到mysql畫面 可以在這裡建立 資料庫 表格 權限
+- 完成後就exit 就可以跳出MYSQL
+- Linux上目前都用mariaDB去用 
 
 #### Tar壓縮檔案與活用date日期指令
+- ls /vsr/www/html 前二單元有放一個範例網頁
+- tar (壓縮檔按指令 > 將所有檔案集合起來包成一包>在壓縮成壓縮檔) 選像c 產生新的包裹檔案 / 選項v觀看指令進度 選項f指定包裹檔案的名稱 選項z檔案壓縮
+- tar cvfz web.tar.gz /var/www/html/*(壓縮指令 名稱 對象的所有內容)
+- 完成之後目錄下就有這個壓縮檔
+- mkdir web 建一個資料夾
+- mv web.tar.gz web 移動這個壓縮檔到這個資料夾
+- cd web 
+- ls
+- tar xvfz web.tar.gz (x=解壓縮)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5905f531-081a-4b7c-b9ed-13de437f8785)
+- date
+- echo $LANG
+- date +%Y
+- date +%Y%m%d
+- tar cvfz web-`date +%Y%m%d`.tar.gz /var/www/html/* 可以得到這個壓縮檔的壓縮日期
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/0421098a-a54b-4d5b-8977-bc46c7069737)
 
 #### SHell程式設計:批次建立帳號實務
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/560c5eb6-6a84-4fda-9f20-430091282813)
+- vi test.sh (這就是一個SHELL的程式)
+- 可以把重複執行的程式寫在do跟done之間 :wq存檔
+- chmod +x test.sh
+- ./test.sh 就可以執行剛剛寫好的程式
+
+- 批次建帳號的功能
+- seq 1 10 (seq=產生循序數字sequence) 如果想要1 3 5 7 9 (seq 1 2 10) seq -w 1 10
+- groupadd cs
+- useradd -g cs mike
+- passwd mike 這樣建立很慢
+- chpasswd 會依照你前面給他的資料來改
+- echo "mike:abc123" | chpasswd
+- 所以要快速建立useradd跟密碼
+- dnf install -y pwgen
+- pwgen 6 3 (我要6個字元 3個密碼)
+- 就可以輸出亂數密碼來
+- 依照上面的知識來寫一隻程式
+- vi add.sh
+- #!/bin/bash >>u8801~u8820
+- for n in `seq -w l 20`(`＝他會把它輸出的資料換成她所輸入的資料)
+- do
+-  useradd -g cs u88$n
+-  echo -n "u88$n:" >> user.list
+-  echo `pwgen 6 1` >> user.list
+- done
+- :wq
+- vi add.sh
+- chmod +x add.sh
+- ./add.sh
+- ls -l 看一下有沒有user.list
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5537b589-ff35-4f64-b69f-a322186eb7c6)
+- cat add.sh
+- cat user.list | chpasswq
 
 #### 設計磁碟用量配額設定
+- dh -h (quota磁碟配額)
+- xfs (tab tab兩下)看一下磁碟資訊
+- xfs_quota XFS 檔案系統磁碟配額工具
+- 掛載參數 uquota,gquota,pquota
+- umount /disk2 先去卸載她
+- mount -o (再掛載時加入選項OPTIONS)
+- mount -q uquota,gquota /dev/sdc1 /disk2
+- blkid 可以看sdc1
+- mount | grep sdc1
+- 掛載完成後 可以用 xfs_quota -x /dev/sdc1 (x=EXPERT專家模式)
+- help
+- report -h
+- inode用量配額
+- block空間用量配額
+- df -h
+- 為使用者在DISK2只能用50M
+- limit bsoft=50m bhard=60M tomsu25478 (bsoft=空間基本限額 bhard=空間絕對配額)
+- report -h
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5a049e54-202a-453c-994c-6486a7995923)
+- 設定完成用quit就可以結束了
+- mkdir /disk2/tomsu25478
+- chown tomsu25478 /disk2/tomsu25478
+- fallocate -l 50m file50m
+- fallocate -l 5m file5m
+- fallocate -l 10m file10m 這時候就可以看到磁碟已滿 因為配額是60M
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/b3723a6a-c61c-4bba-ad5f-4fab58a10c70)
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5523253d-ed1a-41ab-9ac4-167c1b2e9828)
+- Grace寬限期
 
 ## Docker容器管理
 #### Docker容器技術與安裝
