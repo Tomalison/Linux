@@ -646,21 +646,118 @@
 
 ## Docker容器管理
 #### Docker容器技術與安裝
+- 容器與虛擬機器/ VM安裝完成後就像一台一般的主機一樣，擁有虛擬但完整的硬體；容器不像是VM需要傭有所有的模擬硬體；容器主要靠LXC與aufs等Linux技術達成
+- LXC : 利用Kernel namespaces達到在核心中隔離多個空間；每個空間都可以傭有自己的一片天；在一個隔離空間中都會有一個PID是1的Linux啟動行程；這空間中他認為自己就是最初始的行程；用隔離空間可讓一個主要核心執行多套不同的Linux核心
+- AUFS : 一個檔案系統的更動採用分層疊架的方式；更動檔案系統後，這個變動就成為一層；每一層只記錄與上一層的差異
+- Docker就是利用這兩大技術做出來的:他可以記錄一個或多個系統的變動；依規格封裝起來成為一層一層的架構；新的變動疊在舊的上面；需要這個安裝或設定好的系統時，由底下一層一層的執行
+- Image: 儲存在磁碟中的檔案，裏頭封裝了要產生容器時的所有層層資訊，不是在系統中執行的個體(程序)
+- Container: 是由Image所產生的實體容器，他會在系統中擁有狀態，可以是執行或是結束
+- Docker CE版 Docker EE版
+- Podman Buildah
+- rpm -qa | grep docker 要安裝docker要先把之前有關的DOCKER檔案移除
+- dnf remove
+- [https://download.docker.com/linux/](https://download.docker.com/linux/centos/)
+- 複製docker-ce.repo檔案網址
+- dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+- dnf repolist 可以看到docker-ce-stable
+- 接著進行安裝動作
+- dnf install docker-ce
+- 但因為 還需要某程式，所以我們後面加一個不是最佳選項但0還是可以用的指令 dnf install docker-ce --nobest
+- 但還會跟軟體包產生問題
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/b317c81b-96be-44b9-865b-6858506a33d2)
+- dnf update podman-manpages
+- dnf install docker-ce --nobest 這樣安裝就OK
+- systemctl start docker
+- ls /var/lib/docker
+- docker run hello-world
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/4c01c07e-011b-4360-a67f-37e8396ad9a3)
+- 可以看圖 他沒有找到helloworld，他跑去docker hub(官方映像檔集散地)
+- 他會下載回來後，執行這個映像檔變容器
 
 #### Image映像檔與Container容器，指令操作
+- Image: 儲存在磁碟中的檔案，裏頭封裝了要產生容器時的所有層層資訊，不是在系統中執行的個體(程序)
+- Container: 是由Image所產生的實體容器，他會在系統中擁有狀態，可以是執行或是結束
+- hub.docker.com 官網
+- 可在上面找centOS官方的映像
+- docker info 看docker狀態
+- docker pull centos 抓取官網的映像檔
+- docker images 可以看映像檔
+- docker run centos:latest /bin/cat /etc/hosts
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/89c074a1-9288-45b6-b959-c14ae00448fd)
+- docker ps 目前容器狀況
+- docker ps -a 無論是否有執行都列出來
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/e17363a1-ed2a-4d16-a532-fd51c7715208)
+- docker run --name mycentos centos:latest /bin/cat /etc/hosts 幫她取個名字mycentos後執行
+- docker -ps -a -q
 
 #### 建立私人雲服務NextCloud的docker容器
-
+- docker run -i -t --name-web centos:latest /bin/bash (interactive 建立一個互動容器 -t=tty/terminal終端機)
+- 執行後就會看到進到容器 可以執行一些指令 ls -al ls home -l
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/f80dca25-a63e-4f70-8c15-e7748b38171d)
+- 離開方式 exit就可以回到主機下面
+- docker ps
+- 刪除容器要等他停止時
+- 所以停止方式 docker stop containerID
+- docker rm containerID
+- 我們˙來裝一個比較特別的
+- nextcloud 架設私有雲的服務
+- docker pull nextcloud
+- docker images
+- docker run -d (常駐) -p 8080:80 (埠號對應HOST8080到80port) --name nextcloud nextcloud
+- firewall-cmd --list-all
+- firewall-cmd --add-port=8080/tcp --permanent
+- firewall-cmd --reload
+- firewall-cmd --list-all  (Nextcloud=owncloud自由版本)
+- 雲端的運用都是用容器來運用
+  
 ## Google雲端CentOS8虛擬機器
 #### Google雲端虛擬機器準備項目
-
+- 建GCP帳號 綁卡才能用(300美金免費額度
 #### 建立Google雲端CentOS8虛擬機器
-
+- gcp console :
+- 啟用抵免額 在這個帳號可以建立許多個專案(project) 帳單可以針對不同的Project 所以可以放不同的服務
+- Compute Engine > 建立 > 名稱 ，要定義主機放在哪個區域與哪個國家，盡量選擇離我們進一點的(選了之後就無法移動了)，機器等級 N1/N2/E2 練習用3G左右就好 ， 開機硬碟選CENTOS8 標準永久硬碟可以設40G，防火牆允許HTTP與HTTPS流量(雲端上的另一道防火牆) >建立
+  
 #### 使用網頁SSH登入Linux並變身為管理者
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/785532b3-ce70-4069-920e-324814719029)
+- 連結可以開啟terminal(用瀏覽器開啟)
+- 變身超級使用者 sudo su -
+- 貼上資料用CTL+V 清螢幕CTL+L
+- df -h 觀察所有磁碟機 把所有檔案放在根目錄
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/316fbd16-954f-46ff-aa2c-7852294182cb)
 
 #### 安裝Linux必要工具與PHP7.4置換模組
-
+- dnf install wget curl yum-utils -y
+- dnf install epel-release httpd mariadb-server mariadb
+- dnf install php
+- php -version
+- dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+- 如果我要替換版本 dnf modual reset php >Y
+- dnf modual install php:remi-7.4 >Y>Y>Y
+- 建議都用比較新版的PHP版本
+  
 #### GCP雲端防火牆與Linux防火牆
+- Linux還有另一個防火牆FirewallD
+- 導覽選到網路>VPC網路的防火牆 > 建立防火牆規則> 名稱，目標標記(記下來ex nextcloud) ，如果所有網路都要進來可以設定0.0.0.0/0> tcp:8080 >建立
+- 回到VM執行個體 選到網路標記 (加入 nextcloud)>儲存
+- firewall-cmd --add-service=http --permanent
+- firewall-cmd --add-service=https --permanent
+- firewall-cmd --add-port=8080/tcp --permanent
+- firewall-cmd --reload
+- 這樣封包才會進到LINUX的防火牆
 
 #### 配置固定IP與動態域名(domain name)
+- 當我們˙在使用GCP平台機器的外部IP位置 可能重開都會重新配發一個
+- EX
+- shutdown -h now 關機 / 停止
+- 點虛擬機器名稱進去>編輯 可以換GCP能耐
+- 點一下網路介面 : 內部IP跟外部IP都是臨時性 > 外部IP選一個建立IP位置 ex myip
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/66559c5a-5977-402c-9304-9a231a8e8154)
+- 儲存 > 返回 >
+- no ip 創帳密 Free Sign up >管理DNS
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/3d642654-6874-441a-8600-964741e5aff0)
+- 複製GCP上的外部IP位置 > 貼到DNS RECORDS > ACTION MODIFY >update
+- dnf install bind-utils (裡面有DIG指令)
+- dig domain_name
+
 
