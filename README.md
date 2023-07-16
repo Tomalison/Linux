@@ -1,4 +1,4 @@
-![image](https://github.com/Tomalison/Linux/assets/96727036/5e99815d-99e5-40a3-ab5c-d336999862fa)![image](https://github.com/Tomalison/Linux/assets/96727036/065a9ecf-c255-480a-942c-f1d54cc6bb55)# Linux學習紀錄
+![image](https://github.com/Tomalison/Linux/assets/96727036/065a9ecf-c255-480a-942c-f1d54cc6bb55)# Linux學習紀錄
 
 ## 認識與建置Linux
 - 甚麼是Linux，Debin、UBUNTU、CENTOS(GNOME圖形介面)、FEDORA、RED HAT 她是一個自由開放的作業系統。
@@ -508,6 +508,7 @@
 #### 管理服務systemctl指令,Apache網頁伺服器
 - systemctl status httpd
 - firewall-cmd --list-all 可以看一下PUBLIC這個ZONE有沒有允許 HTTPD SSH通過
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/5e99815d-99e5-40a3-ab5c-d336999862fa)
 - cat /usr/lib/firewalld/
 - firewall-cmd --add-service=https --permanent
 - firewall-cmd --reload
