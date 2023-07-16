@@ -1,4 +1,4 @@
-![image](https://github.com/Tomalison/Linux/assets/96727036/065a9ecf-c255-480a-942c-f1d54cc6bb55)# Linux學習紀錄
+# Linux學習紀錄
 
 ## 認識與建置Linux
 - 甚麼是Linux，Debin、UBUNTU、CENTOS(GNOME圖形介面)、FEDORA、RED HAT 她是一個自由開放的作業系統。
@@ -418,6 +418,7 @@
 #### 新一代管理介面cockpit
 - redhat8有一個新的管理介面 叫做cockpit
 - systemctl enable --now cockpit.socket 可以啟動這個服務
+- ![image](https://github.com/Tomalison/Linux/assets/96727036/065a9ecf-c255-480a-942c-f1d54cc6bb55)
 - 如果再firewall-cmd --list-all 沒有看到這個cockpit的服務 也可以用firewall-cmd --add-port=9090/tcp --permanent >>firewall-cmd --reload 開啟這個服務
 - 這個指令就是取代 netstat -tanlp這個網管指令 ss -tanlp 可以傾聽服務是否有被啟動 可以看下圖9090有通了
 - ![image](https://github.com/Tomalison/Linux/assets/96727036/0be251f8-8d10-4a9e-a0df-5b4ef5ef9009)
